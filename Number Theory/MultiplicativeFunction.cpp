@@ -23,7 +23,28 @@ public:
 		}
 		return divisor;
 	}
+
+	/* Complexity: Sqrt(N) */
+	T calculate(T N) {
+		T result = 1;
+		for (T i = 2; i * i <= N; i++) {
+			if (N % i == 0) {
+				int exponent = 0;
+				T power = 1;
+				do {
+					exponent++;
+					power *= i;
+					N /= i;
+				} while (N % i == 0);
+				result *= value(i, exponent, power);
+			}
+		}
+		if (N != 1)
+			result *= value(N, 1, N);
+		return result;
+	}
 	
+	/* Complexity: N log N */
 	vector<T> calculateUpTo(int N) {
 		vector<int> divisor = generateDivisorTable(N);
 		vector<T> result(N, 0);
@@ -54,6 +75,8 @@ public:
 int main() {
 	DivisorSum<long long> ds;
 	vector<long long> sigma = ds.calculateUpTo(1000000);
+
+	printf("%lld\n", ds.calculate(5));
 
 	int N;
 	while(~scanf("%d", &N)) {
