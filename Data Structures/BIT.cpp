@@ -70,6 +70,9 @@ class BIT
         }
         return sum;
     }
+    T getRangeSum(int a, int b) {
+        return read(b) - read(a - 1);
+    }
 };
 
 int main() {
@@ -85,7 +88,7 @@ int main() {
 
         LL result = 0;
         REP(i, N) {
-            result += bit.read(10000001) - bit.read(arr[i]);
+            result += bit.getRangeSum(arr[i], 10000001);
             bit.update(arr[i], 1);
         }
         printf("%lld\n", result);
