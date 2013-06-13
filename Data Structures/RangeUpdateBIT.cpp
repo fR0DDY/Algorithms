@@ -40,68 +40,68 @@ template<class T>
 class RangeUpdateBIT
 {
     T *tree;
-	T *mulTree;
-	int maxVal;
-	public:
-	RangeUpdateBIT(int N)
-	{
-		tree = new T[N+1];
-		mulTree = new T[N + 1];
-		memset(tree, 0, sizeof(T) * (N + 1));
-		memset(mulTree, 0, sizeof(T) * (N + 1));
-		maxVal = N;
-	}
-	~RangeUpdateBIT() {
+    T *mulTree;
+    int maxVal;
+    public:
+    RangeUpdateBIT(int N)
+    {
+        tree = new T[N+1];
+        mulTree = new T[N + 1];
+        memset(tree, 0, sizeof(T) * (N + 1));
+        memset(mulTree, 0, sizeof(T) * (N + 1));
+        maxVal = N;
+    }
+    ~RangeUpdateBIT() {
         free(tree);
         free(mulTree);
     }
-	void update(int idx, T val)
-	{
-		T mulVal = (idx - 1) * val;
-		while (idx <= maxVal)
-		{
-			tree[idx] += val;
-			mulTree[idx] += mulVal;
-			idx += (idx & -idx);
-		}
-	}
-	//Returns the cumulative frequency of index idx
-	T read(int idx)
-	{
-		int pos = idx;
-		T sum=0, mulSum = 0;
-		while (idx>0)
-		{
-			sum += tree[idx];
-			mulSum += mulTree[idx];
-			idx -= (idx & -idx);
-		}
-		return sum * pos - mulSum;
-	}
-	void rangeUpdate(int a, int b, T val) {
-		update(a, val);
-		update(b + 1, -val);
-	}
-	T getRangeSum(int a, int b) {
-		return read(b) - read(a - 1);
-	}
+    void update(int idx, T val)
+    {
+        T mulVal = (idx - 1) * val;
+        while (idx <= maxVal)
+        {
+            tree[idx] += val;
+            mulTree[idx] += mulVal;
+            idx += (idx & -idx);
+        }
+    }
+    //Returns the cumulative frequency of index idx
+    T read(int idx)
+    {
+        int pos = idx;
+        T sum=0, mulSum = 0;
+        while (idx>0)
+        {
+            sum += tree[idx];
+            mulSum += mulTree[idx];
+            idx -= (idx & -idx);
+        }
+        return sum * pos - mulSum;
+    }
+    void rangeUpdate(int a, int b, T val) {
+        update(a, val);
+        update(b + 1, -val);
+    }
+    T getRangeSum(int a, int b) {
+        return read(b) - read(a - 1);
+    }
 };
 
 int main() {
-	int T, N , Q, c, p, q, v;
-	scanf("%d", &T);
-	while(T--) {
-		scanf("%d%d", &N, &Q);
-		RangeUpdateBIT<LL> bit(N);
-		while(Q--) {
-			scanf("%d", &c);
-			if(c) {
-				scanf("%d%d", &p, &q);
-				printf("%lld\n", bit.getRangeSum(p, q));
-			}else {
-				scanf("%d%d%d", &p, &q, &v);
-				bit.rangeUpdate(p, q, v);
-			}
-		}
-	}
+    int T, N , Q, c, p, q, v;
+    scanf("%d", &T);
+    while(T--) {
+        scanf("%d%d", &N, &Q);
+        RangeUpdateBIT<LL> bit(N);
+        while(Q--) {
+            scanf("%d", &c);
+            if(c) {
+                scanf("%d%d", &p, &q);
+                printf("%lld\n", bit.getRangeSum(p, q));
+            }else {
+                scanf("%d%d%d", &p, &q, &v);
+                bit.rangeUpdate(p, q, v);
+            }
+        }
+    }
 }
